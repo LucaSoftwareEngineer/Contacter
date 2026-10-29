@@ -1,5 +1,7 @@
 using Contacter.Models;
 using Contacter.Repositories;
+using Contacter.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,15 @@ builder.Services.AddControllersWithViews();
 // Registrazione dei Repository
 builder.Services.AddScoped<IUtenteRepository, UtenteRepository>();
 builder.Services.AddScoped<IContattoRepository, ContattoRepository>();
+
+// Registrazione del PasswordHasher nativo di ASP.NET Core
+builder.Services.AddScoped<IPasswordHasher<Utenti>, PasswordHasher<Utenti>>();
+
+// Registrazione dei Service
+builder.Services.AddScoped<IUtenteService, UtenteService>();
+builder.Services.AddScoped<IContattoService, ContattoService>();
+builder.Services.AddScoped<IUtenteService, UtenteService>();
+builder.Services.AddScoped<IContattoService, ContattoService>();
 
 var app = builder.Build();
 
