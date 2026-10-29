@@ -1,0 +1,36 @@
+﻿@model Contacter.Models.Contatti
+
+@{
+    ViewData["Title"] = "Aggiungi Contatto";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <h2>Nuovo Contatto</h2>
+        
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="ConNome" class="form-label">Nome</label>
+                <input asp-for="ConNome" class="form-control" />
+                <span asp-validation-for="ConNome" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConEmail" class="form-label">Email</label>
+                <input asp-for="ConEmail" class="form-control" />
+                <span asp-validation-for="ConEmail" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConTel" class="form-label">Telefono</label>
+                <input asp-for="ConTel" class="form-control" />
+                <span asp-validation-for="ConTel" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-success">Salva</button>
+            <a asp-action="Index" class="btn btn-secondary">Annulla</a>
+        </form>
+    </div>
+</div>

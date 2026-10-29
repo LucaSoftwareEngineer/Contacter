@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Contacter.Models.Contatti>
+
+@{
+    ViewData["Title"] = "I miei Contatti";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>I miei Contatti</h2>
+        <a asp-action="Create" class="btn btn-primary">Nuovo Contatto</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefono</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ConNome</td>
+                    <td>@item.ConEmail</td>
+                    <td>@item.ConTel</td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@item.ConId" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo contatto?');">Elimina</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
