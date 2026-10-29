@@ -1,4 +1,5 @@
 using Contacter.Models;
+using Contacter.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,10 @@ builder.Services.AddDbContext<DevContacterContext>(options => options.UseSqlServ
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Registrazione dei Repository
+builder.Services.AddScoped<IUtenteRepository, UtenteRepository>();
+builder.Services.AddScoped<IContattoRepository, ContattoRepository>();
 
 var app = builder.Build();
 
