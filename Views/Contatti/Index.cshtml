@@ -4,35 +4,127 @@
     ViewData["Title"] = "I miei Contatti";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>I miei Contatti</h2>
-        <a asp-action="Create" class="btn btn-primary">Nuovo Contatto</a>
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+    <div>
+        <h2 class="auth-title mb-0">I miei Contatti</h2>
+        <p class="text-muted mb-0">
+            @Model.Count() @(Model.Count() == 1 ? "contatto" : "contatti") in rubrica
+        </p>
     </div>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Telefono</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.ConNome</td>
-                    <td>@item.ConEmail</td>
-                    <td>@item.ConTel</td>
-                    <td>
-                        <form asp-action="Delete" asp-route-id="@item.ConId" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo contatto?');">Elimina</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <a asp-action="Create" class="btn btn-primary btn-pill px-4">
+        <i class="bi bi-plus-lg me-1"></i>Nuovo contatto
+    </a>
 </div>
+
+@if (!Model.Any())
+{
+    <div class="card empty-state text-center">
+        <div class="card-body py-5">
+            <div class="empty-icon mx-auto mb-3"><i class="bi bi-journal-bookmark"></i></div>
+            <h5 class="fw-semibold">Nessun contatto ancora</h5>
+            <p class="text-muted mb-4">Aggiungi il tuo primo contatto per iniziare a costruire la rubrica.</p>
+            <a asp-action="Create" class="btn btn-primary btn-pill px-4">
+                <i class="bi bi-plus-lg me-1"></i>Aggiungi contatto
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card contacts-card">
+        <div class="card-header bg-white border-0 pt-3 pb-2 px-3 px-md-4">
+            <div class="input-group search-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="search" id="contactSearch" class="form-control" placeholder="Cerca per nome, email o telefono..." aria-label="Cerca contatti" />
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="contactsTable">
+                <thead>
+                    <tr>
+                        <th class="ps-3 ps-md-4">Contatto</th>
+                        <th>Email</th>
+                        <th>Telefono</th>
+                        <th class="text-end pe-3 pe-md-4">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var initial = string.IsNullOrWhiteSpace(item.ConNome) ? "?" : item.ConNome.Trim().Substring(0, 1).ToUpper();
+
+                        <tr data-search="@($"{item.ConNome} {item.ConEmail} {item.ConTel}".ToLower())">
+                            <td class="ps-3 ps-md-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="contact-avatar">@initial</span>
+                                    <span class="fw-semibold">@item.ConNome</span>
+                                </div>
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.ConEmail))
+                                {
+                                    <a href="mailto:@item.ConEmail" class="contact-link">
+                                        <i class="bi bi-envelope me-1"></i>@item.ConEmail
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.ConTel))
+                                {
+                                    <a href="tel:@item.ConTel" class="contact-link">
+                                        <i class="bi bi-telephone me-1"></i>@item.ConTel
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td class="text-end pe-3 pe-md-4">
+                                <form asp-action="Delete" asp-route-id="@item.ConId" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-pill"
+                                            title="Elimina contatto"
+                                            onclick="return confirm('Sei sicuro di voler eliminare questo contatto?');">
+                                        <i class="bi bi-trash3 me-1"></i><span class="d-none d-sm-inline">Elimina</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    <tr id="noResults" class="d-none">
+                        <td colspan="4" class="text-center text-muted py-4">
+                            <i class="bi bi-search me-1"></i>Nessun contatto corrisponde alla ricerca.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const input = document.getElementById('contactSearch');
+            if (!input) return;
+            const rows = document.querySelectorAll('#contactsTable tbody tr[data-search]');
+            const noResults = document.getElementById('noResults');
+
+            input.addEventListener('input', function () {
+                const q = input.value.trim().toLowerCase();
+                let visible = 0;
+                rows.forEach(function (row) {
+                    const match = row.dataset.search.includes(q);
+                    row.classList.toggle('d-none', !match);
+                    if (match) visible++;
+                });
+                noResults.classList.toggle('d-none', visible !== 0);
+            });
+        })();
+    </script>
+}

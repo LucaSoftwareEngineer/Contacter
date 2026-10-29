@@ -1,31 +1,239 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+:root {
+    --brand: #4f46e5;
+    --brand-dark: #4338ca;
+    --brand-soft: #eef2ff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --bg: #f8fafc;
+    --border: #e2e8f0;
+    --radius: 12px;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    font-size: 15px;
+}
+
+@@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* ---------- Navbar ---------- */
+.app-navbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: .6rem 0;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--brand), #7c3aed);
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.brand-text {
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--text);
+}
+
+.app-navbar .nav-link {
+    color: var(--muted);
+    font-weight: 500;
+    border-radius: 8px;
+    padding: .5rem .85rem;
+    transition: background .15s, color .15s;
+}
+
+    .app-navbar .nav-link:hover,
+    .app-navbar .nav-link:focus {
+        color: var(--brand);
+        background: var(--brand-soft);
+    }
+
+.user-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: .3rem .8rem;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-size: .875rem;
+    font-weight: 500;
+}
+
+/* ---------- Bottoni ---------- */
+.btn-pill {
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: var(--brand);
+    border-color: var(--brand);
+}
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background: var(--brand-dark);
+        border-color: var(--brand-dark);
+    }
+
+.btn:focus, .form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .2);
+}
+
+/* ---------- Card, tabelle e form (migliorano anche le altre pagine) ---------- */
+.card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .05);
+    transition: box-shadow .2s, transform .2s;
+}
+
+    .card:hover {
+        box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+    }
+
+.table {
+    --bs-table-bg: #fff;
+}
+
+    .table > thead {
+        background: var(--brand-soft);
+    }
+
+        .table > thead th {
+            color: var(--brand-dark);
+            font-weight: 600;
+            font-size: .8rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            border-bottom: 0;
+        }
+
+.table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: var(--brand-soft);
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border-color: var(--border);
+    padding: .6rem .85rem;
+}
+
+a {
+    color: var(--brand);
+}
+
+    a:hover {
+        color: var(--brand-dark);
+    }
+
+/* ---------- Footer ---------- */
+.app-footer {
+    background: #fff;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: .875rem;
+    padding: 1.25rem 0;
+}
+
+/* ---------- Pagine di autenticazione ---------- */
+.auth-wrapper {
+    min-height: calc(100vh - 260px);
+}
+
+.auth-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(79, 70, 229, .08);
+}
+
+    .auth-card:hover {
+        box-shadow: 0 10px 40px rgba(79, 70, 229, .08); /* niente effetto hover sul form */
+    }
+
+.auth-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--brand), #7c3aed);
+    color: #fff;
+    font-size: 1.8rem;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, .3);
+}
+
+.auth-title {
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+
+/* Input group coerenti con i form-control */
+.input-group-text {
+    background: var(--brand-soft);
+    border-color: var(--border);
+    color: var(--brand);
+    border-radius: 10px 0 0 10px;
+}
+
+.input-group > .form-control {
+    border-radius: 0 10px 10px 0;
+}
+
+    .input-group > .form-control:not(:last-child) {
+        border-radius: 0;
+    }
+
+.btn-toggle-password {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 0;
+    color: var(--muted);
+    border-radius: 0 10px 10px 0;
+}
+
+    .btn-toggle-password:hover {
+        color: var(--brand);
+        background: var(--brand-soft);
+    }
+
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .form-control,
+.input-group:focus-within .btn-toggle-password {
+    border-color: var(--brand);
+}
+
+/* ---------- Indicatore robustezza password ---------- */
+.password-strength {
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.password-strength-bar {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    transition: width .25s ease, background .25s ease;
 }

@@ -4,33 +4,71 @@
     ViewData["Title"] = "Aggiungi Contatto";
 }
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <h2>Nuovo Contatto</h2>
-        
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="mb-3">
-                <label asp-for="ConNome" class="form-label">Nome</label>
-                <input asp-for="ConNome" class="form-control" />
-                <span asp-validation-for="ConNome" class="text-danger"></span>
-            </div>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
 
-            <div class="mb-3">
-                <label asp-for="ConEmail" class="form-label">Email</label>
-                <input asp-for="ConEmail" class="form-control" />
-                <span asp-validation-for="ConEmail" class="text-danger"></span>
-            </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb small mb-3">
+                <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">I miei Contatti</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Nuovo contatto</li>
+            </ol>
+        </nav>
 
-            <div class="mb-3">
-                <label asp-for="ConTel" class="form-label">Telefono</label>
-                <input asp-for="ConTel" class="form-control" />
-                <span asp-validation-for="ConTel" class="text-danger"></span>
+        <div class="card form-card">
+            <div class="card-body p-4 p-md-5">
+
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="auth-icon flex-shrink-0">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <div>
+                        <h2 class="auth-title h3 mb-0">Nuovo contatto</h2>
+                        <p class="text-muted mb-0">Compila i dati per aggiungerlo alla rubrica</p>
+                    </div>
+                </div>
+
+                <form asp-action="Create" method="post" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConNome" class="form-label fw-medium">Nome</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input asp-for="ConNome" class="form-control" placeholder="Mario Rossi" autofocus />
+                        </div>
+                        <span asp-validation-for="ConNome" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConEmail" class="form-label fw-medium">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="ConEmail" class="form-control" placeholder="nome@esempio.it" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="ConEmail" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ConTel" class="form-label fw-medium">Telefono</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                            <input asp-for="ConTel" type="tel" class="form-control" placeholder="+39 333 1234567" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="ConTel" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-light border btn-pill px-4">Annulla</a>
+                        <button type="submit" class="btn btn-primary btn-pill px-4">
+                            <i class="bi bi-check2-circle me-1"></i>Salva contatto
+                        </button>
+                    </div>
+                </form>
             </div>
-            
-            <button type="submit" class="btn btn-success">Salva</button>
-            <a asp-action="Index" class="btn btn-secondary">Annulla</a>
-        </form>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

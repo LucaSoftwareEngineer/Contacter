@@ -4,33 +4,118 @@
     ViewData["Title"] = "Registrazione";
 }
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-4">
-        <h2 class="mb-3">Crea un Account</h2>
+<div class="row justify-content-center align-items-center auth-wrapper">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+        <div class="card auth-card">
+            <div class="card-body p-4 p-md-5">
 
-        <form asp-action="Register" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+                <div class="text-center mb-4">
+                    <div class="auth-icon mx-auto mb-3">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <h2 class="auth-title mb-1">Crea un account</h2>
+                    <p class="text-muted mb-0">Inizia a organizzare i tuoi contatti in pochi secondi</p>
+                </div>
 
-            <div class="mb-3">
-                <label asp-for="ConfirmPassword" class="form-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                <form asp-action="Register" method="post" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-medium"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Email" class="form-control" placeholder="nome@esempio.it" autocomplete="email" autofocus />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-medium"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input asp-for="Password" class="form-control" placeholder="••••••••" autocomplete="new-password" />
+                            <button type="button" class="btn btn-toggle-password" data-toggle-target="Password" aria-label="Mostra o nascondi password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+
+                        <div class="password-strength mt-2" aria-hidden="true">
+                            <div class="password-strength-bar" id="strengthBar"></div>
+                        </div>
+                        <small class="text-muted" id="strengthText">Usa almeno 8 caratteri, con lettere e numeri.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ConfirmPassword" class="form-label fw-medium"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="••••••••" autocomplete="new-password" />
+                            <button type="button" class="btn btn-toggle-password" data-toggle-target="ConfirmPassword" aria-label="Mostra o nascondi conferma password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 btn-pill">
+                        Registrati <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </form>
+
+                <hr class="my-4" />
+
+                <p class="text-center text-muted mb-0">
+                    Hai già un account?
+                    <a asp-action="Login" class="fw-semibold text-decoration-none">Accedi</a>
+                </p>
             </div>
-            
-            <button type="submit" class="btn btn-success w-100">Registrati</button>
-        </form>
-        <p class="mt-3 text-center">Hai già un account? <a asp-action="Login">Accedi</a></p>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Mostra/nascondi password (funziona per entrambi i campi)
+        document.querySelectorAll('.btn-toggle-password').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const input = document.getElementById(this.dataset.toggleTarget);
+                const icon = this.querySelector('i');
+                const show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                icon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+            });
+        });
+
+        // Indicatore di robustezza password (solo feedback visivo)
+        (function () {
+            const input = document.getElementById('Password');
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
+            const levels = [
+                { w: '0%', c: 'transparent', t: 'Usa almeno 8 caratteri, con lettere e numeri.' },
+                { w: '25%', c: '#ef4444', t: 'Password debole' },
+                { w: '50%', c: '#f59e0b', t: 'Password discreta' },
+                { w: '75%', c: '#10b981', t: 'Password buona' },
+                { w: '100%', c: '#059669', t: 'Password ottima' }
+            ];
+
+            input.addEventListener('input', function () {
+                const v = input.value;
+                let score = 0;
+                if (v.length >= 8) score++;
+                if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+                if (/\d/.test(v)) score++;
+                if (/[^A-Za-z0-9]/.test(v)) score++;
+                if (v.length === 0) score = 0;
+                else if (score === 0) score = 1;
+
+                const lvl = levels[score];
+                bar.style.width = lvl.w;
+                bar.style.background = lvl.c;
+                text.textContent = lvl.t;
+            });
+        })();
+    </script>
+}
