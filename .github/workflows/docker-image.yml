@@ -12,6 +12,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    environment: dockerhub
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
